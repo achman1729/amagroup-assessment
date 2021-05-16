@@ -76,25 +76,24 @@ const LocationForm = (props: P) => {
   }
 
   useEffect(() => {
+    // load 1 sec after user stops typing
     const timeoutId = setTimeout(() => load(), 1000)
     console.log("timeoutId: ", timeoutId)
     return () => clearTimeout(timeoutId)
   }, [siteName])
 
-  const load = () => {
+  const load = async () => {
     let convertedSiteName = spaceToPlusConverter(siteName)
     console.log("convertedSiteName", convertedSiteName)
     let data: any
 
     if (siteName !== "") {
-
       console.log("siteName", siteName)
 
-      geoCodeApi(siteName).then(dataRes => {
+      await geoCodeApi(siteName).then(dataRes => {
         console.log("dataRes", dataRes)
         data = dataRes
       })
-
       console.log("data", data)
 
       if (data) {
@@ -102,7 +101,6 @@ const LocationForm = (props: P) => {
         setLongitude(`${data.geometry.location.lng}`)
         setRegion(`${data.address_components[3].long_name}`)
       }
-
     } else {
       resetStateValues()
     }
