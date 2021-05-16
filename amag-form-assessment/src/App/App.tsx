@@ -1,12 +1,10 @@
 import React from 'react';
-import './App.css';
-import { Button } from '@material-ui/core';
+import LocationDetail from '../Components/LocationDetail/LocationDetail'
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="App">
-
-      <Button variant="contained" color="primary">Hello World</Button>
+      <LocationDetail />
     </div>
   );
 }
