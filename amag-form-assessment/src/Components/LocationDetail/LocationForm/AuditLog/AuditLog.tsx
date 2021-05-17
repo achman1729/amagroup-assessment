@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "@material-ui/core/Container";
 import {
   makeStyles,
@@ -14,7 +14,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
-import { auditP} from '../../../../interfaces/interfaces'
+import { auditP, DataObj } from "../../../../interfaces/interfaces";
+import { getFormData } from "../../../../service/dataStorage";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,7 +51,12 @@ let theme = createMuiTheme({
 theme = responsiveFontSizes(theme);
 
 const AuditLog = (props: auditP) => {
-  let auditLog = props.auditLog;
+  // let auditLog = props.auditLog;
+  const [auditLog, setAuditLog] = useState<DataObj[]>([]);
+
+  useEffect(() => {
+    setAuditLog(getFormData());
+  }, [auditLog]);
 
   const classes = useStyles();
   return (

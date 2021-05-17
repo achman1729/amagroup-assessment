@@ -11,6 +11,7 @@ import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import moment from 'moment'
 import {formP, DataObj} from '../../../interfaces/interfaces'
+import {storeFormData} from '../../../service/dataStorage'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,7 +46,7 @@ const LocationForm = (props: formP) => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [region, setRegion] = useState("");
-  
+
   let siteId: number;
   let auditLog: DataObj[] = [];
   let dataObj: DataObj;
@@ -74,7 +75,7 @@ const LocationForm = (props: formP) => {
     console.log("dataObj", dataObj);
     auditLog.push(dataObj);
     console.log("auditLog", auditLog);
-    localStorage.setItem("auditLog", JSON.stringify(auditLog));
+    storeFormData(auditLog)
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
