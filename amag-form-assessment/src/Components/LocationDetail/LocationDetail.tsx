@@ -41,12 +41,12 @@ const LocationDetail: React.FC = () => {
 	return (
 		<div className={classes.root}>
 			<Grid container spacing={3}>
-				<Grid item xs={3}>
-					<h3>Please enter a site issue: </h3>
+				<Grid item xs={2}>
+					<h3>Enter a site issue: </h3>
 				</Grid>
 				<Grid className={classes.buttonStyle} item xs={2}>
 					<Button variant="contained" type="submit" onClick={handleShowForm}>
-						Enter Issue
+						Enter new issue
         </Button>
 				</Grid>
 			</Grid>

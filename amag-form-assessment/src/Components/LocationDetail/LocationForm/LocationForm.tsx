@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react"
-import clsx from "clsx"
-import TextField from "@material-ui/core/TextField"
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
-import { Button, InputAdornment, FormControl } from "@material-ui/core"
-import SaveIcon from "@material-ui/icons/Save"
-
-import axios from "axios"
-import { geoCodeApi } from '../../../service/api'
-import { spaceToPlusConverter } from "../../../utils/HelperFuctions"
-import { API_KEY } from "../../../keys/ApiKey"
-import AuditLog from "./AuditLog/AuditLog"
-import CssBaseline from "@material-ui/core/CssBaseline"
-import Container from "@material-ui/core/Container"
-import Box from "@material-ui/core/Box"
+import React, { useEffect, useState } from "react";
+import clsx from "clsx";
+import TextField from "@material-ui/core/TextField";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { Button, InputAdornment, FormControl } from "@material-ui/core";
+import SaveIcon from "@material-ui/icons/Save";
+import { geoCodeApi } from "../../../service/api";
+import AuditLog from "./AuditLog/AuditLog";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
+import Box from "@material-ui/core/Box";
+import moment from 'moment'
+import {formP, DataObj} from '../../../interfaces/interfaces'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,85 +34,92 @@ const useStyles = makeStyles((theme: Theme) =>
       borderBottom: "1px solid grey",
     },
   })
-)
+);
 
-interface P {
-  hideForm: Function
-}
+const LocationForm = (props: formP) => {
 
-const LocationForm = (props: P) => {
-  const classes = useStyles()
-  const [siteName, setSiteName] = useState("")
-  const [showError, setShowError] = useState(false)
-  const [latitude, setLatitude] = useState("")
-  const [longitude, setLongitude] = useState("")
-  const [region, setRegion] = useState("")
+  const classes = useStyles();
+  const [siteName, setSiteName] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [siteDescription, setSiteDescription] = useState("hello");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [region, setRegion] = useState("");
+  
+  let siteId: number;
+  let auditLog: DataObj[] = [];
+  let dataObj: DataObj;
+  let date = moment().format('Do MMMM YYYY, h:mm:ss a')
+  siteId = 1
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log("form submitted")
+    e.preventDefault();
+
+    console.log("form submitted");
     if (siteName === "") {
-      setShowError(true)
+      setShowError(true);
     } else {
-      setShowError(false)
-      props.hideForm()
-      resetStateValues()
+      setShowError(false);
+      dataObj = {
+        siteId: siteId,
+        siteName: siteName,
+        region: region,
+        description: siteDescription,
+        lat: latitude,
+        lng: longitude,
+        date: date
+      };
     }
-    console.log("siteNameNotEmpty", showError)
-  }
+    console.log("siteNameNotEmpty", showError);
+    console.log("dataObj", dataObj);
+    auditLog.push(dataObj);
+    console.log("auditLog", auditLog);
+    localStorage.setItem("auditLog", JSON.stringify(auditLog));
+  };
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-    console.log("form cancelled")
-    props.hideForm()
-  }
-
-  const handleOnChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
-    setSiteName(e.target.value)
-  }
+    e.preventDefault();
+    console.log("form cancelled");
+    props.hideForm();
+    resetStateValues();
+  };
 
   useEffect(() => {
     // load 1 sec after user stops typing
-    const timeoutId = setTimeout(() => load(), 1000)
-    console.log("timeoutId: ", timeoutId)
-    return () => clearTimeout(timeoutId)
-  }, [siteName])
+    const timeoutId = setTimeout(() => load(), 1000);
+    console.log("timeoutId: ", timeoutId);
+    return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteName]);
 
   const load = async () => {
-    let convertedSiteName = spaceToPlusConverter(siteName)
-    console.log("convertedSiteName", convertedSiteName)
-    let data: any
-
+    let data: any;
     if (siteName !== "") {
-      console.log("siteName", siteName)
-
-      await geoCodeApi(siteName).then(dataRes => {
-        console.log("dataRes", dataRes)
-        data = dataRes
-      })
-      console.log("data", data)
+      await geoCodeApi(siteName).then((dataRes) => {
+        console.log("dataRes", dataRes);
+        data = dataRes;
+      });
+      console.log("data", data);
 
       if (data) {
-        setLatitude(`${data.geometry.location.lat}`)
-        setLongitude(`${data.geometry.location.lng}`)
-        setRegion(`${data.address_components[3].long_name}`)
+        setLatitude(`${data.geometry.location.lat}`);
+        setLongitude(`${data.geometry.location.lng}`);
+        setRegion(`${data.address_components[3].long_name}`);
       }
     } else {
-      resetStateValues()
+      resetStateValues();
     }
-  }
+  };
 
   const resetStateValues = () => {
-    setLatitude("")
-    setLongitude("")
-    setRegion("")
-    setSiteName("")
-  }
+    setLatitude("");
+    setLongitude("");
+    setRegion("");
+    setSiteName("");
+  };
 
-  console.log("siteName", siteName)
-  console.log("showError", showError)
+  console.log("siteName", siteName);
+  console.log("showError", showError);
 
   return (
     <div>
@@ -151,7 +156,7 @@ const LocationForm = (props: P) => {
                   defaultValue=""
                   value={siteName}
                   variant="outlined"
-                  onChange={(e) => handleOnChange(e)}
+                  onChange={(e) => setSiteName(e.target.value)}
                 />
               ) : (
                 <TextField
@@ -160,7 +165,7 @@ const LocationForm = (props: P) => {
                   defaultValue=""
                   value={siteName}
                   variant="outlined"
-                  onChange={(e) => handleOnChange(e)}
+                  onChange={(e) => setSiteName(e.target.value)}
                   helperText="Site name can't be empty"
                 />
               )}
@@ -180,6 +185,8 @@ const LocationForm = (props: P) => {
                 label="Site Description"
                 defaultValue=""
                 variant="outlined"
+                value={siteDescription}
+                onChange={(e) => setSiteDescription(e.target.value)}
               />
             </div>
             <div className={classes.lngLatInput}>
@@ -220,10 +227,10 @@ const LocationForm = (props: P) => {
         </Box>
       </Container>
       <div>
-        <AuditLog />
+        <AuditLog auditLog={auditLog}/>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LocationForm
+export default LocationForm;
