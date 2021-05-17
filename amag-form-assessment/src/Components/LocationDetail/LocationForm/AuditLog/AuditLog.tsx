@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Container from "@material-ui/core/Container";
 import {
   makeStyles,
@@ -12,10 +12,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Box from "@material-ui/core/Box";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
-import { auditP, DataObj } from "../../../../interfaces/interfaces";
-import { getFormData } from "../../../../service/dataStorage";
+import { auditP } from "../../../../interfaces/interfaces";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,12 +50,14 @@ let theme = createMuiTheme({
 theme = responsiveFontSizes(theme);
 
 const AuditLog = (props: auditP) => {
-  // let auditLog = props.auditLog;
-  const [auditLog, setAuditLog] = useState<DataObj[]>([]);
+  let auditLog = props.auditLog;
+  // const [auditLog, setAuditLog] = useState<DataObj[]>(props.auditLog);
 
-  useEffect(() => {
-    setAuditLog(getFormData());
-  }, [auditLog]);
+	console.log("auditLog", auditLog)
+
+  // useEffect(() => {
+	// 	setAuditLog(auditLog);
+  // }, [auditLog]);
 
   const classes = useStyles();
   return (
@@ -70,13 +71,13 @@ const AuditLog = (props: auditP) => {
             <List className={classes.root} subheader={<li />}>
               {auditLog.map((log) => (
                 <li
-                  key={`section-${log.siteId}`}
+                  key={`section-${log.siteId += 1}`}
                   className={classes.listSection}
                 >
                   <ul className={classes.ul}>
                     <ListItem key={`${log.siteId}`}>
                       <Typography>
-                        <ListItemText primary={`Updated on ${log.date}`} />
+                        {`Updated on ${log.date}`}
                       </Typography>
                     </ListItem>
                   </ul>
