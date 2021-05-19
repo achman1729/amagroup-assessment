@@ -31,12 +31,10 @@ const LocationDetail: React.FC = () => {
 	const [showForm, setShowForm] = useState(false)
 	const classes = useStyles();
 
-	const handleShowForm = () => {
-		setShowForm(true)
-	}
 	const hideForm = () => {
 		setShowForm(false)
 	}
+	
 	return (
 		<div className={classes.root}>
 			<Grid container spacing={3}>
@@ -44,7 +42,7 @@ const LocationDetail: React.FC = () => {
 					<h3>Enter a site issue: </h3>
 				</Grid>
 				<Grid className={classes.buttonStyle} item xs={2}>
-					<Button variant="contained" type="submit" onClick={handleShowForm}>
+					<Button className="enter-issue-btn" variant="contained" type="submit" onClick={() => setShowForm(true)}>
 						Enter new issue
         </Button>
 				</Grid>

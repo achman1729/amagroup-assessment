@@ -158,7 +158,7 @@ const LocationForm = (props: formP) => {
                 <TextField
                   id="location-name"
                   label="Site Name"
-                  defaultValue=""
+
                   value={siteName}
                   variant="outlined"
                   onChange={(e) => setSiteName(e.target.value)}
@@ -167,7 +167,7 @@ const LocationForm = (props: formP) => {
                 <TextField
                   error
                   id="empty-location-name"
-                  defaultValue=""
+
                   value={siteName}
                   variant="outlined"
                   onChange={(e) => setSiteName(e.target.value)}
@@ -179,7 +179,6 @@ const LocationForm = (props: formP) => {
               <TextField
                 id="region"
                 label="Jurisdiction/City/Region"
-                defaultValue=""
                 variant="filled"
                 value={region}
               />
@@ -188,7 +187,6 @@ const LocationForm = (props: formP) => {
               <TextField
                 id="description"
                 label="Site Description"
-                defaultValue=""
                 variant="outlined"
                 value={siteDescription}
                 onChange={(e) => setSiteDescription(e.target.value)}
