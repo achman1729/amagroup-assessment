@@ -52,8 +52,6 @@ theme = responsiveFontSizes(theme);
 const AuditLog = (props: auditP) => {
   let auditLog = props.auditLog;
 
-	console.log("auditLog", auditLog)
-
   const classes = useStyles();
   return (
     <div>

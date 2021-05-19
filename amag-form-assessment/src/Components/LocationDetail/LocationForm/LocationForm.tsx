@@ -4,14 +4,14 @@ import TextField from "@material-ui/core/TextField";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { Button, InputAdornment, FormControl } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-import { geoCodeApi } from "../../../service/api";
+import geoCodeService from "../../../service/api";
 import AuditLog from "./AuditLog/AuditLog";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import moment from 'moment'
-import {formP, DataObj} from '../../../interfaces/interfaces'
-import {storeFormData, getFormData} from '../../../service/dataStorage'
+import { formP, DataObj } from '../../../interfaces/interfaces'
+import dataStorageService from '../../../service/dataStorage'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,11 +56,10 @@ const LocationForm = (props: formP) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(getFormData()){
-      setAuditLog(getFormData())
+    if (dataStorageService.getFormData()) {
+      setAuditLog(dataStorageService.getFormData())
     }
-    
-    console.log("form submitted");
+
     if (siteName === "") {
       setShowError(true);
     } else {
@@ -74,17 +73,13 @@ const LocationForm = (props: formP) => {
         lng: longitude,
         date: date
       };
-      console.log("siteNameNotEmpty", showError);
-      console.log("dataObj", dataObj);
       setAuditLog([...auditLog, dataObj])
-      console.log("auditLog", auditLog);
-      storeFormData(auditLog)
+      dataStorageService.storeFormData(auditLog)
     }
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    console.log("form cancelled");
     props.hideForm();
     resetStateValues();
   };
@@ -92,7 +87,6 @@ const LocationForm = (props: formP) => {
   useEffect(() => {
     // load 1 sec after user stops typing
     const timeoutId = setTimeout(() => load(), 1000);
-    console.log("timeoutId: ", timeoutId);
     return () => clearTimeout(timeoutId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [siteName]);
@@ -100,11 +94,9 @@ const LocationForm = (props: formP) => {
   const load = async () => {
     let data: any;
     if (siteName !== "") {
-      await geoCodeApi(siteName).then((dataRes) => {
-        console.log("dataRes", dataRes);
+      await geoCodeService.getGeoCodeLocationData(siteName).then((dataRes: any) => {
         data = dataRes;
       });
-      console.log("data", data);
 
       if (data) {
         setLatitude(`${data.geometry.location.lat}`);
@@ -122,9 +114,6 @@ const LocationForm = (props: formP) => {
     setRegion("");
     setSiteName("");
   };
-
-  console.log("siteName", siteName);
-  console.log("showError", showError);
 
   return (
     <div>
@@ -230,7 +219,7 @@ const LocationForm = (props: formP) => {
         </Box>
       </Container>
       <div>
-        <AuditLog auditLog={auditLog}/>
+        <AuditLog auditLog={auditLog} />
       </div>
     </div>
   );
