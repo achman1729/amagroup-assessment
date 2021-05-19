@@ -42,7 +42,7 @@ const LocationForm = (props: formP) => {
   const classes = useStyles();
   const [siteName, setSiteName] = useState("");
   const [showError, setShowError] = useState(false);
-  const [siteDescription, setSiteDescription] = useState("hello");
+  const [siteDescription, setSiteDescription] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [region, setRegion] = useState("");
@@ -77,7 +77,6 @@ const LocationForm = (props: formP) => {
       console.log("siteNameNotEmpty", showError);
       console.log("dataObj", dataObj);
       setAuditLog([...auditLog, dataObj])
-      // auditLog.push(dataObj);
       console.log("auditLog", auditLog);
       storeFormData(auditLog)
     }

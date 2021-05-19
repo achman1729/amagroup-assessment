@@ -51,13 +51,8 @@ theme = responsiveFontSizes(theme);
 
 const AuditLog = (props: auditP) => {
   let auditLog = props.auditLog;
-  // const [auditLog, setAuditLog] = useState<DataObj[]>(props.auditLog);
 
 	console.log("auditLog", auditLog)
-
-  // useEffect(() => {
-	// 	setAuditLog(auditLog);
-  // }, [auditLog]);
 
   const classes = useStyles();
   return (
